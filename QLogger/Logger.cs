@@ -27,12 +27,12 @@ namespace QLogger
 
         public void WriteLine(string msg)
         {
-            InplaceWrite(0, msg);
+            InplaceWriteLine(0, msg);
         }
 
         public void WriteLine(string fmt, params object[] args)
         {
-            InplaceWrite(0, fmt, args);
+            InplaceWriteLine(0, fmt, args);
         }
 
         public int InplaceWrite(int back, string msg)
