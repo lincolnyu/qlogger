@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Logger.cs" />
     <Compile Include="Helpers\ConsoleHelper.cs" />
+    <Compile Include="PerformanceLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
