@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using static QLogger.ConsoleHelpers.WriteMethods;
 
 namespace QLogger
 {
@@ -13,54 +14,79 @@ namespace QLogger
 
         #region Methods
 
-        public void WriteStart(string msg)
+        public void WriteStart(StaticWriteMethod write, string msg)
         {
-            Write(msg);
+            write(msg);
 
             StartTimes.Push(DateTime.UtcNow);
         }
 
-        public void WriteStart(string fmt,  params object[] args)
+        public void WriteStartFormat(StaticWriteFormatMethod write, string fmt, params object[] args)
         {
-            Write(fmt, args);
+            write(fmt, args);
 
             StartTimes.Push(DateTime.UtcNow);
+        }
+
+        public void WriteEnd(StaticWriteMethod write, string msg)
+        {
+            var st = StartTimes.Pop();
+            var et = DateTime.UtcNow;
+            var elapsed = et - st;
+
+            var s = string.Format("{0} ({1} secs elapsed)", msg, elapsed.TotalSeconds);
+            write(s);
+        }
+
+        public void WriteEndFormat(StaticWriteFormatMethod write, string fmt, params object[] args)
+        {
+            var s = string.Format(fmt, args);
+            var st = StartTimes.Pop();
+            var et = DateTime.UtcNow;
+            var elapsed = et - st;
+
+            s = string.Format("{0} ({1} secs elapsed)", s, elapsed.TotalSeconds);
+            write(s);
+        }
+
+        public void WriteStart(string msg)
+        {
+            WriteStart(Write, msg);
         }
 
         public void WriteLineStart(string msg)
         {
-            WriteLine(msg);
+            WriteStart(WriteLine, msg);
+        }
 
-            StartTimes.Push(DateTime.UtcNow);
+        public void WriteStart(string fmt,  params object[] args)
+        {
+            WriteStartFormat(Write, fmt, args);
         }
 
         public void WriteLineStart(string fmt, params object[] args)
         {
-            WriteLine(fmt, args);
+            WriteStartFormat(WriteLine, fmt, args);
+        }
 
-            StartTimes.Push(DateTime.UtcNow);
+        public void WriteEnd(string msg)
+        {
+            WriteEnd(Write, msg);
+        }
+
+        public void WriteLineEnd(string msg)
+        {
+            WriteEnd(WriteLine, msg);
+        }
+
+        public void WriteEnd(string fmt, params object[] args)
+        {
+            WriteEndFormat(Write, fmt, args);
         }
 
         public void WriteLineEnd(string fmt, params object[] args)
         {
-            var s = string.Format(fmt, args);
-            var st = StartTimes.Pop();
-            var et = DateTime.UtcNow;
-            var elapsed = et - st;
-
-            s = string.Format("{0} ({1} secs elapsed)", s, elapsed.TotalSeconds);
-            WriteLine(s);
-        }
-
-        public void InplaceWriteLineEnd(int back, string fmt, params object[] args)
-        {
-            var s = string.Format(fmt, args);
-            var st = StartTimes.Pop();
-            var et = DateTime.UtcNow;
-            var elapsed = et - st;
-
-            s = string.Format("{0} ({1} secs elapsed)", s, elapsed.TotalSeconds);
-            InplaceWriteLine(back, s);
+            WriteEndFormat(WriteLine, fmt, args);
         }
 
         #endregion

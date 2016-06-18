@@ -1,102 +1,80 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using QLogger.ConsoleHelpers;
 using System.IO;
-using QLogger.Helpers;
+using static QLogger.ConsoleHelpers.WriteMethods;
 
 namespace QLogger
 {
     public class Logger
     {
+        #region Delegates
+
+        delegate void WriteMethod(TextWriter tw);
+
+        #endregion
+
         #region Properties
 
-        public ISet<TextWriter> Writers { get; private set; } = new HashSet<TextWriter>();
+        public ISet<object> Writers { get; private set; } = new HashSet<object>();
 
         #endregion
 
         #region Methods
 
+        private void Write(TextWriteMethod textWrite, InplaceWriteMethod inplaceWrite, string msg)
+        {
+            foreach (var writer in Writers)
+            {
+                var tw = writer as TextWriter;
+                if (tw != null)
+                {
+                    textWrite(tw, msg);
+                    continue;
+                }
+                var iw = writer as InplaceWriter;
+                if (iw != null)
+                {
+                    inplaceWrite(iw, msg);
+                }
+            }
+        }
+
+        private void WriteFormat(TextWriteFormatMethod textWrite, InplaceWriteFormatMethod inplaceWrite, string fmt, params object[] args)
+        {
+            foreach (var writer in Writers)
+            {
+                var tw = writer as TextWriter;
+                if (tw != null)
+                {
+                    textWrite(tw, fmt, args);
+                    continue;
+                }
+                var iw = writer as InplaceWriter;
+                if (iw != null)
+                {
+                    inplaceWrite(iw, fmt, args);
+                }
+            }
+        }
+
         public void Write(string msg)
         {
-            InplaceWrite(0, msg);
+            Write(TextWrite, InplaceWrite, msg);
         }
 
         public void Write(string fmt, params object[] args)
         {
-            InplaceWrite(0, fmt, args);
+            WriteFormat(TextWrite, InplaceWrite, fmt, args);
         }
 
         public void WriteLine(string msg)
         {
-            InplaceWriteLine(0, msg);
+            Write(TextWriteLine, InplaceWriteLine, msg);
         }
 
         public void WriteLine(string fmt, params object[] args)
         {
-            InplaceWriteLine(0, fmt, args);
-        }
-
-        public int InplaceWrite(int back, string msg)
-        {
-            var res = 0;
-            foreach (var writer in Writers)
-            {
-                if (writer == Console.Out)
-                {
-                    res = back.InplaceWrite(msg);
-                }
-                else
-                {
-                    writer.Write(msg);
-                }
-            }
-            return res;
-        }
-
-        public int InplaceWrite(int back, string fmt, params object[] args)
-        {
-            var res = 0;
-            foreach (var writer in Writers)
-            {
-                if (writer == Console.Out)
-                {
-                    res = back.InplaceWrite(fmt, args);
-                }
-                else
-                {
-                    writer.Write(fmt, args);
-                }
-            }
-            return res;
-        }
-
-        public void InplaceWriteLine(int back, string msg)
-        {
-            foreach (var writer in Writers)
-            {
-                if (writer == Console.Out)
-                {
-                    back.InplaceWriteLine(msg);
-                }
-                else
-                {
-                    writer.WriteLine(msg);
-                }
-            }
-        }
-
-        public void InplaceWriteLine(int back, string fmt, params object[] args)
-        {
-            foreach (var writer in Writers)
-            {
-                if (writer == Console.Out)
-                {
-                    back.InplaceWriteLine(fmt, args);
-                }
-                else
-                {
-                    writer.WriteLine(fmt, args);
-                }
-            }
+            WriteFormat(TextWriteLine, InplaceWriteLine, fmt, args);
         }
 
         #endregion
