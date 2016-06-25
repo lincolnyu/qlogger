@@ -3,7 +3,7 @@ using QLogger.ConsoleHelpers;
 using System.IO;
 using static QLogger.ConsoleHelpers.WriteMethods;
 
-namespace QLogger
+namespace QLogger.Logging
 {
     public class Logger
     {

@@ -43,8 +43,9 @@
     <Compile Include="ConsoleHelpers\ArgsHelper.cs" />
     <Compile Include="ConsoleHelpers\InplaceWriter.cs" />
     <Compile Include="ConsoleHelpers\WriteMethods.cs" />
-    <Compile Include="Logger.cs" />
-    <Compile Include="PerformanceLogger.cs" />
+    <Compile Include="Logging\Logger.cs" />
+    <Compile Include="Logging\Stopwatch.cs" />
+    <Compile Include="Logging\StopwatchItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

@@ -13,10 +13,11 @@ namespace QLogger.ConsoleHelpers
         private delegate void InternalWriteFormatMethod(StaticWriteFormatMethod write, string format, params object[] args);
 
         #endregion
-        
+
         #region Properties
 
-        public readonly static TimeSpan DefaultRefreshInterval = TimeSpan.FromMilliseconds(33); // print 30 times every sec
+        // by default print at most 5 times every sec
+        public readonly static TimeSpan DefaultRefreshInterval = TimeSpan.FromMilliseconds(200);
 
         public static InplaceWriter Instance { get; } = new InplaceWriter();
 
@@ -54,38 +55,49 @@ namespace QLogger.ConsoleHelpers
 
         public void WriteFormatNoPadding(StaticWriteFormatMethod write, string format, params object[] args)
         {
-            RestoreCursor();
-            write(format, args);
+            lock(this)
+            {
+                RestoreCursor();
+                write(format, args);
+            }
         }
 
         public void WritePadding(StaticWriteMethod write, string s)
         {
-            var x = Console.CursorLeft;
-            var y = Console.CursorTop;
-            RestoreCursor();
-            if (Console.CursorTop < y || Console.CursorTop == y && Console.CursorLeft < x)
+            lock(this)
             {
-                var paddingLen = (y - Console.CursorTop) * LineLength
-                    + (x - Console.CursorLeft);
-                var padding = new string(' ', paddingLen);
-                Console.Write(padding);
+                var x = Console.CursorLeft;
+                var y = Console.CursorTop;
+                RestoreCursor();
+                if (Console.CursorTop < y || Console.CursorTop == y && Console.CursorLeft < x)
+                {
+                    var paddingLen = (y - Console.CursorTop) * LineLength
+                        + (x - Console.CursorLeft);
+                    var padding = new string(' ', paddingLen);
+                    Console.Write(padding);
+                }
+                RestoreCursor();
+                write(s);
             }
-            WriteNoPadding(write, s);
         }
 
         public void WriteFormatPadding(StaticWriteFormatMethod write, string format, params object[] args)
         {
-            var x = Console.CursorLeft;
-            var y = Console.CursorTop;
-            RestoreCursor();
-            if (Console.CursorTop < y || Console.CursorTop == y && Console.CursorLeft < x)
+            lock(this)
             {
-                var paddingLen = (y - Console.CursorTop) * LineLength
-                    + (x - Console.CursorLeft);
-                var padding = new string(' ', paddingLen);
-                Console.Write(padding);
+                var x = Console.CursorLeft;
+                var y = Console.CursorTop;
+                RestoreCursor();
+                if (Console.CursorTop < y || Console.CursorTop == y && Console.CursorLeft < x)
+                {
+                    var paddingLen = (y - Console.CursorTop) * LineLength
+                        + (x - Console.CursorLeft);
+                    var padding = new string(' ', paddingLen);
+                    Console.Write(padding);
+                }
+                RestoreCursor();
+                write(format, args);
             }
-            WriteFormatNoPadding(write, format, args);
         }
 
         private void Write(StaticWriteMethod write, bool padding, string s)
