@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QLogger", "QLogger.csproj", "{124E7226-5154-4A8C-B4A1-BDAEBA8C1973}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QLoggerTest", "..\QLoggerTest\QLoggerTest.csproj", "{B6D40EC1-5258-4112-B738-316D5672FB5E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QLoggerTestConsole", "..\QLoggerTestConsole\QLoggerTestConsole.csproj", "{B6D40EC1-5258-4112-B738-316D5672FB5E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

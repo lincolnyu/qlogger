@@ -1,8 +1,9 @@
 ﻿using System;
 using QLogger.ConsoleHelpers;
 using QLogger;
+using QLogger.Logging;
 
-namespace QLoggerTest
+namespace QLoggerTestConsole
 {
     class Program
     {
@@ -18,22 +19,21 @@ namespace QLoggerTest
             InplaceWriter.Instance.Write("a short one\n");
         }
 
-        static void TestPerfLog()
+        static void TestStopwatch()
         {
-            var perflog = new PerformanceLogger();
-            perflog.Writers.Add(InplaceWriter.Instance);
-            perflog.WriteStart("wait started");
-            InplaceWriter.Instance.RememberCursor();
-            InplaceWriter.Instance.WriteLine();
-            InplaceWriter.Instance.RememberCursor();
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
             System.Threading.Thread.Sleep(3000);
-            perflog.WriteEnd("wait finished");
+            stopwatch.End((watch, startUtc, endUtc) =>
+            {
+                Console.WriteLine($"Started at {startUtc}, ended at {endUtc}, duration {endUtc - startUtc}");
+            });
             Console.WriteLine();
         }
 
         static void Main(string[] args)
         {
-            TestPerfLog();
+            TestStopwatch();
         }
     }
 }
