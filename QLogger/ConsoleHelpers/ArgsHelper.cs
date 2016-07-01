@@ -30,7 +30,7 @@ namespace QLogger.ConsoleHelpers
             return null;
         }
 
-        public static IEnumerable<string> ConvertStringToArgs(this string argsLine)
+        public static IEnumerable<string> ParseArgs(this string argsLine)
         {
             argsLine = argsLine.Trim();
             var inQuote= false;
@@ -54,7 +54,7 @@ namespace QLogger.ConsoleHelpers
                         else
                         {
                             // look ahead
-                            if (i < argsLine.Length - 1 && argsLine[i] == '"')
+                            if (i < argsLine.Length - 1 && argsLine[i+1] == '"')
                             {
                                 currArg += c;
                             }
@@ -69,6 +69,10 @@ namespace QLogger.ConsoleHelpers
                         currArg += c;
                     }
                 }
+            }
+            if (currArg != "")
+            {
+                yield return currArg;
             }
         }
     }
