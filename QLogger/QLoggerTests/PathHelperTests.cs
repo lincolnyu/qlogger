@@ -9,7 +9,7 @@ namespace QLoggerTests
         class InputOutputPairs
         {
             public string Base { get; set; }
-            public string Relative { get; set; }
+            public string ChangeTo { get; set; }
             public string Output { get; set; }
         }
 
@@ -18,21 +18,39 @@ namespace QLoggerTests
             new InputOutputPairs
             {
                 Base = @"C:\Program Files\Microsoft Visual Studio\v12",
-                Relative = @"..\..\Common Files",
+                ChangeTo = @"..\..\Common Files",
                 Output = @"C:\Program Files\Common Files\"
             },
             new InputOutputPairs
             {
                 Base = @"C:\Program Files\Microsoft Visual Studio\v12",
-                Relative = @"\\..\..\.\Common Files",
+                ChangeTo = @"..\\..\.\Common Files",
                 Output = @"C:\Program Files\Common Files\"
             },
             new InputOutputPairs
             {
                 Base = @"C:",
-                Relative = @"\\Program Files\Microsoft Visual Studio\..\..\.\Windows",
+                ChangeTo = @"\\Program Files\Microsoft Visual Studio\..\..\.\Windows",
                 Output = @"C:\Windows\"
             },
+            new InputOutputPairs
+            {
+                Base = @"C:\Program Files\Microsoft Visual Studio\v12",
+                ChangeTo = @"\\Windows\System32",
+                Output = @"C:\Windows\System32\"
+            },
+            new InputOutputPairs // invalid change-to input
+            {
+                Base = @"C:\Program Files\Microsoft Visual Studio\v12",
+                ChangeTo = @"\\..\..\Windows\System32",
+                Output = @"C:\Windows\System32\"
+            },
+            new InputOutputPairs // invalid input
+            {
+                Base = @"C:",
+                ChangeTo = @"\\..\..\Windows\System32",
+                Output = @"C:\Windows\System32\"
+            }
         };
 
         [TestMethod]
@@ -40,7 +58,7 @@ namespace QLoggerTests
         {
             foreach (var sample in _samples)
             {
-                var actual = sample.Base.ChangeDir(sample.Relative);
+                var actual = sample.Base.ChangeDir(sample.ChangeTo);
                 var expected = sample.Output;
                 Assert.AreEqual(expected, actual);
             }

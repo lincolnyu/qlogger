@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using QLogger.FileSystemHelpers;
+using System.IO;
 
 namespace QLogger.Shell
 {
@@ -64,8 +65,8 @@ namespace QLogger.Shell
             }
             else
             {
-                var path = Path.Combine(ConsoleContext.CurrentDirectory.FullName, dir);
-                path.TrimEnd('.');
+                var currDir = ConsoleContext.CurrentDirectory.FullName;
+                var path = currDir.ChangeDir(dir);
                 ConsoleContext.SetDirectory(path);
             }
             return Results.Success;

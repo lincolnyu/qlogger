@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.IO;
+using System.Text;
 
 namespace QLogger.FileSystemHelpers
 {
@@ -137,18 +138,38 @@ namespace QLogger.FileSystemHelpers
             var len = sb.Length;
             var i = len - 1;
             if (i < 0) return;
-            if (sb[i] == '\\') i--;
+            var last = i;
+            var lastIsSlash = sb[i] == '\\';
+            if (lastIsSlash) i--;
             for (; i >= 0 && sb[i] != '\\'; i--)
             {
             }
-            sb.Remove(i + 1, len - i - 1); // excluding the base '\\'
+            if (i >= 0)
+            {
+                sb.Remove(i + 1, len - i - 1); // excluding the base '\\'
+            }
+            else if (!lastIsSlash)
+            {
+                sb.Append('\\');
+            }
         }
 
         public static string ChangeDir(this string currentDir, string relativeDir)
         {
-            var slashNeeded = !currentDir.EndsWith("\\") && !relativeDir.StartsWith("\\");
-            var combined = slashNeeded ? currentDir + "\\" + relativeDir : currentDir + relativeDir;
+            var toRoot = relativeDir.StartsWith("\\");
+            string combined;
+            if (toRoot)
+            {
+                var root = Path.GetPathRoot(currentDir);
+                combined = root + relativeDir;
+            }
+            else
+            {
+                var slashNeeded = !currentDir.EndsWith("\\");
+                combined = slashNeeded ? currentDir + "\\" + relativeDir : currentDir + relativeDir;
+            }
             return combined.NormalizeDir();
         }
     }
 }
+
