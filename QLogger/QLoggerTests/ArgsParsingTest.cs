@@ -5,7 +5,7 @@ using System.Linq;
 namespace QLoggerTests
 {
     [TestClass]
-    public class TestArgsParsing
+    public class ArgsParsingTest
     {
         class InputOutputPairs
         {
@@ -13,7 +13,7 @@ namespace QLoggerTests
             public string[] Output { get; set; }
         }
 
-        InputOutputPairs[] _sampels = new InputOutputPairs[]
+        InputOutputPairs[] _samples = new InputOutputPairs[]
         {
             new InputOutputPairs
             {
@@ -38,9 +38,9 @@ namespace QLoggerTests
         };
 
         [TestMethod]
-        public void TestMethod1()
+        public void TestArgsParsing()
         {
-            foreach (var sample in _sampels)
+            foreach (var sample in _samples)
             {
                 var actual = sample.Input.ParseArgs().ToArray();
                 var expected = sample.Output;

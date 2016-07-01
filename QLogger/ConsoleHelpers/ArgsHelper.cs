@@ -57,6 +57,7 @@ namespace QLogger.ConsoleHelpers
                             if (i < argsLine.Length - 1 && argsLine[i+1] == '"')
                             {
                                 currArg += c;
+                                i++;
                             }
                             else
                             {
