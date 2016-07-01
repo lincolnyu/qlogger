@@ -50,6 +50,18 @@ namespace QLoggerTests
                 Base = @"C:",
                 ChangeTo = @"\\..\..\Windows\System32",
                 Output = @"C:\Windows\System32\"
+            },
+            new InputOutputPairs
+            {
+                Base = @"C:",
+                ChangeTo = @"\",
+                Output = @"C:\"
+            },
+            new InputOutputPairs
+            {
+                Base = @"C:\Program Files\Microsoft Visual Studio\v12",
+                ChangeTo = @"\",
+                Output = @"C:\"
             }
         };
 
