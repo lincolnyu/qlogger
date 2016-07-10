@@ -50,8 +50,8 @@
     <Compile Include="Logging\StopwatchItem.cs" />
     <Compile Include="FileSystemHelpers\WindowsPathHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Shell\CommandSystem.cs" />
-    <Compile Include="Shell\ConsoleContext.cs" />
+    <Compile Include="Shell\WindowsCommandSystem.cs" />
+    <Compile Include="Shell\WindowsConsoleContext.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

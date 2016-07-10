@@ -154,6 +154,12 @@ namespace QLogger.FileSystemHelpers
             }
         }
 
+        /// <summary>
+        ///  Returns the string that represents to the directory that's <paramref name="relativeDir"/> relative to <paramref name="currentDir"/>
+        /// </summary>
+        /// <param name="currentDir">The current directory (it normally should be absolute, but relative is allowed)</param>
+        /// <param name="relativeDir">The relative directory to current whose complete dir is to be returned</param>
+        /// <returns>The resultant directory</returns>
         public static string ChangeDir(this string currentDir, string relativeDir)
         {
             var toRoot = relativeDir.StartsWith("\\");
@@ -169,6 +175,45 @@ namespace QLogger.FileSystemHelpers
                 combined = slashNeeded ? currentDir + "\\" + relativeDir : currentDir + relativeDir;
             }
             return combined.NormalizeDir();
+        }
+
+        public static bool IsAbsoluteDir(this string dir)
+        {
+            dir = dir.Trim();
+            return dir.ParseDriveIndicatorTrimmed() >= 0;
+        }
+
+        public static bool IsDriveIndicator(this string dir)
+        {
+            dir = dir.Trim();
+            var i = dir.ParseDriveIndicatorTrimmed();
+            return i == dir.Length;
+        }
+
+        private static int ParseDriveIndicatorTrimmed(this string dir)
+        {
+            var state = 0;
+            for (var i = 0; i < dir.Length; i++)
+            {
+                var c = dir[i];
+                if (state == 0)
+                {
+                    if (!char.IsLetterOrDigit(c)) return -1;
+                    state = 1;
+                }
+                else if (state == 1)
+                {
+                    if (c == ':') return i+1;
+                    if (!char.IsLetterOrDigit(c)) return -1;
+                }
+            }
+            return -1;
+        }
+
+        public static string GetDriveLetters(this string path)
+        {
+            var drive = Path.GetPathRoot(path).TrimEnd('\\').TrimEnd(':');
+            return drive;
         }
     }
 }

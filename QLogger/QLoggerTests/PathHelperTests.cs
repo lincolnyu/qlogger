@@ -62,6 +62,42 @@ namespace QLoggerTests
                 Base = @"C:\Program Files\Microsoft Visual Studio\v12",
                 ChangeTo = @"\",
                 Output = @"C:\"
+            },
+            new InputOutputPairs
+            {
+                Base = @"\Program Files\Microsoft Visual Studio",
+                ChangeTo = @"..",
+                Output = @"\Program Files\"
+            },
+            new InputOutputPairs
+            {
+                Base = @"\Program Files\Microsoft Visual Studio",
+                ChangeTo = @"\",
+                Output = @"\"
+            },
+            new InputOutputPairs // invalid change-to
+            {
+                Base = @"\Program Files\Microsoft Visual Studio",
+                ChangeTo = @"\..",
+                Output = @"\"
+            },
+            new InputOutputPairs
+            {
+                Base = @"\Program Files\Microsoft Visual Studio",
+                ChangeTo = @"..\..",
+                Output = @"\"
+            },
+            new InputOutputPairs // invalid change-to
+            {
+                Base = @"Program Files\Microsoft Visual Studio",
+                ChangeTo = @"..\",
+                Output = @"Program Files\"
+            },
+            new InputOutputPairs // invalid change-to
+            {
+                Base = @"Program Files\Microsoft Visual Studio",
+                ChangeTo = @"..\..",
+                Output = @"Program Files\"
             }
         };
 
