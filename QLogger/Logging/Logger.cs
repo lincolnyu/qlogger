@@ -2,14 +2,29 @@
 using QLogger.ConsoleHelpers;
 using System.IO;
 using static QLogger.ConsoleHelpers.WriteMethods;
+using System.Linq;
 
 namespace QLogger.Logging
 {
     public class Logger
     {
+        #region Nested classes
+
+        public class WriterWrapper
+        {
+            public WriterWrapper(object writer)
+            {
+                Writer = writer;
+            }
+            public object Writer { get; }
+            public virtual bool IsActive { get; set; }
+        }
+
+        #endregion
+
         #region Properties
 
-        public ISet<object> Writers { get; private set; } = new HashSet<object>();
+        public ISet<WriterWrapper> Writers { get; private set; } = new HashSet<WriterWrapper>();
 
         #endregion
 
@@ -17,7 +32,7 @@ namespace QLogger.Logging
 
         private void Write(TextWriteMethod textWrite, InplaceWriteMethod inplaceWrite, string msg)
         {
-            foreach (var writer in Writers)
+            foreach (var writer in Writers.Where(x=>x.IsActive).Select(x=>x.Writer))
             {
                 var tw = writer as TextWriter;
                 if (tw != null)
@@ -35,7 +50,7 @@ namespace QLogger.Logging
 
         private void WriteFormat(TextWriteFormatMethod textWrite, InplaceWriteFormatMethod inplaceWrite, string fmt, params object[] args)
         {
-            foreach (var writer in Writers)
+            foreach (var writer in Writers.Where(x => x.IsActive).Select(x => x.Writer))
             {
                 var tw = writer as TextWriter;
                 if (tw != null)
