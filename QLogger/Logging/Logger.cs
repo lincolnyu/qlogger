@@ -7,12 +7,6 @@ namespace QLogger.Logging
 {
     public class Logger
     {
-        #region Delegates
-
-        delegate void WriteMethod(TextWriter tw);
-
-        #endregion
-
         #region Properties
 
         public ISet<object> Writers { get; private set; } = new HashSet<object>();
