@@ -49,6 +49,7 @@
     <Compile Include="Logging\Stopwatch.cs" />
     <Compile Include="Logging\StopwatchItem.cs" />
     <Compile Include="FileSystemHelpers\WindowsPathHelper.cs" />
+    <Compile Include="Logging\SimpleTimeEstimator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Shell\WindowsCommandSystem.cs" />
     <Compile Include="Shell\WindowsConsoleContext.cs" />
