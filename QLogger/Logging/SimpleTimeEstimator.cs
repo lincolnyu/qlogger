@@ -18,7 +18,9 @@ namespace QLogger.Logging
 
         private Queue<Record> _queue = new Queue<Record>();
 
-        public int QueueLength { get; private set; }
+        public TimeSpan SamplePeriod { get; }
+
+        public TimeSpan RetainPeriod { get; }
 
         public DateTime StartTime { get; private set; }
         
@@ -42,9 +44,15 @@ namespace QLogger.Logging
         /// </summary>
         public TimeSpan? Estimate { get; private set; }
         
-        public SimpleTimeEstimator(int queueLen = 16)
+        public SimpleTimeEstimator(int samplePeriodSeconds = 5, int retainPeriodSeconds = 60)
+            : this(TimeSpan.FromSeconds(samplePeriodSeconds), TimeSpan.FromSeconds(retainPeriodSeconds))
         {
-            QueueLength = queueLen;
+        }
+
+        public SimpleTimeEstimator(TimeSpan samplePeriod, TimeSpan retainPeriod)
+        {
+            SamplePeriod = samplePeriod;
+            RetainPeriod = retainPeriod;
         }
 
         public void Start()
@@ -59,14 +67,29 @@ namespace QLogger.Logging
             lock (this)
             {
                 var currTime = DateTime.UtcNow;
-                _queue.Enqueue(new Record(currTime, percentage));
-                while (_queue.Count > QueueLength)
+                var sinceLast = currTime - LastTime;
+                if (sinceLast >= SamplePeriod)
                 {
-                    _queue.Dequeue();
+                    _queue.Enqueue(new Record(currTime, percentage));
                 }
-                var first = _queue.Peek();
-                var timeDiff = currTime - first.Time;
-                var progress = percentage - first.Percentage;
+
+                Record head;
+                while (_queue.Count > 2)
+                {
+                    head = _queue.Peek();
+                    var queuePeriod = currTime - head.Time;
+                    if (queuePeriod > RetainPeriod)
+                    {
+                        _queue.Dequeue();
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                head = _queue.Peek();
+                var timeDiff = currTime - head.Time;
+                var progress = percentage - head.Percentage;
                 if (timeDiff.TotalSeconds < double.Epsilon)
                 {
                     Estimate = null; // instable result, can't estimate
