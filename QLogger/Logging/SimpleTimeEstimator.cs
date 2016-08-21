@@ -40,7 +40,7 @@ namespace QLogger.Logging
         /// <summary>
         ///  Estimated remaining time 
         /// </summary>
-        public TimeSpan Estimate { get; private set; }
+        public TimeSpan? Estimate { get; private set; }
         
         public SimpleTimeEstimator(int queueLen = 16)
         {
@@ -67,15 +67,22 @@ namespace QLogger.Logging
                 var first = _queue.Peek();
                 var timeDiff = currTime - first.Time;
                 var progress = percentage - first.Percentage;
-                var speed = progress / timeDiff.TotalSeconds;
-                if (speed < double.Epsilon)
+                if (timeDiff.TotalSeconds < double.Epsilon)
                 {
-                    Estimate = new TimeSpan(-1);
+                    Estimate = null; // instable result, can't estimate
                 }
                 else
                 {
-                    var remaining = (1 - percentage) / speed;
-                    Estimate = TimeSpan.FromSeconds(remaining);
+                    var speed = progress / timeDiff.TotalSeconds;
+                    if (speed < double.Epsilon)
+                    {
+                        Estimate = null; // can't estimate
+                    }
+                    else
+                    {
+                        var remaining = (1 - percentage) / speed;
+                        Estimate = TimeSpan.FromSeconds(remaining);
+                    }
                 }
                 LastTime = currTime;
                 LastPercentage = percentage;
