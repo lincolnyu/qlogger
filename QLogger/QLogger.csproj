@@ -44,12 +44,14 @@
     <Compile Include="AppHelpers\AppInfo.cs" />
     <Compile Include="ConsoleHelpers\ArgsHelper.cs" />
     <Compile Include="ConsoleHelpers\InplaceWriter.cs" />
+    <Compile Include="ConsoleHelpers\ParallelArgsHelper.cs" />
     <Compile Include="ConsoleHelpers\WriteMethods.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="Logging\Stopwatch.cs" />
     <Compile Include="Logging\StopwatchItem.cs" />
     <Compile Include="FileSystemHelpers\WindowsPathHelper.cs" />
     <Compile Include="Logging\SimpleTimeEstimator.cs" />
+    <Compile Include="Parallelism\Parallelizer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Shell\WindowsCommandSystem.cs" />
     <Compile Include="Shell\WindowsConsoleContext.cs" />
