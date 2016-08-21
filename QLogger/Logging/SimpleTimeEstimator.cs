@@ -16,12 +16,35 @@ namespace QLogger.Logging
             public double Percentage { get; }
         }
 
-        private Queue<Record> _queue = new Queue<Record>();
+        public const int DefaultSamplePeriodSeconds = 5;
+        public const int DefaultRetainPeriodSeconds = 60;
 
+        public SimpleTimeEstimator(int samplePeriodSeconds = DefaultSamplePeriodSeconds, int retainPeriodSeconds = DefaultRetainPeriodSeconds)
+            : this(TimeSpan.FromSeconds(samplePeriodSeconds), TimeSpan.FromSeconds(retainPeriodSeconds))
+        {
+        }
+
+        public SimpleTimeEstimator(TimeSpan samplePeriod, TimeSpan retainPeriod)
+        {
+            SamplePeriod = samplePeriod;
+            RetainPeriod = retainPeriod;
+        }
+
+        private Queue<Record> _queue = new Queue<Record>();
+        
+        /// <summary>
+        ///  How often record is added to the queue roughly
+        /// </summary>
         public TimeSpan SamplePeriod { get; }
 
+        /// <summary>
+        ///  How old record is retained in the queue
+        /// </summary>
         public TimeSpan RetainPeriod { get; }
 
+        /// <summary>
+        ///  When Start() is called
+        /// </summary>
         public DateTime StartTime { get; private set; }
         
         /// <summary>
@@ -44,17 +67,6 @@ namespace QLogger.Logging
         /// </summary>
         public TimeSpan? Estimate { get; private set; }
         
-        public SimpleTimeEstimator(int samplePeriodSeconds = 5, int retainPeriodSeconds = 60)
-            : this(TimeSpan.FromSeconds(samplePeriodSeconds), TimeSpan.FromSeconds(retainPeriodSeconds))
-        {
-        }
-
-        public SimpleTimeEstimator(TimeSpan samplePeriod, TimeSpan retainPeriod)
-        {
-            SamplePeriod = samplePeriod;
-            RetainPeriod = retainPeriod;
-        }
-
         public void Start()
         {
             StartTime = DateTime.UtcNow;
