@@ -17,6 +17,7 @@ namespace QLogger.Logging
                 Writer = writer;
             }
             public object Writer { get; }
+            public virtual bool FlushEveryWrite { get; set; }
             public virtual bool IsActive { get; set; }
         }
 
@@ -32,15 +33,16 @@ namespace QLogger.Logging
 
         private void Write(TextWriteMethod textWrite, InplaceWriteMethod inplaceWrite, string msg)
         {
-            foreach (var writer in Writers.Where(x=>x.IsActive).Select(x=>x.Writer))
+            foreach (var writer in Writers.Where(x=>x.IsActive))
             {
-                var tw = writer as TextWriter;
+                var tw = writer.Writer as TextWriter;
                 if (tw != null)
                 {
                     textWrite(tw, msg);
+                    if (writer.FlushEveryWrite) tw.Flush();
                     continue;
                 }
-                var iw = writer as InplaceWriter;
+                var iw = writer.Writer as InplaceWriter;
                 if (iw != null)
                 {
                     inplaceWrite(iw, msg);

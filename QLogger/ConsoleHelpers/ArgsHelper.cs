@@ -75,5 +75,26 @@ namespace QLogger.ConsoleHelpers
                 yield return currArg;
             }
         }
+
+        /// <summary>
+        ///  Parse switch value as int
+        /// </summary>
+        /// <param name="args">The arg list</param>
+        /// <param name="sw">The switch</param>
+        /// <param name="absenceValue">Value to return when the switch is absent</param>
+        /// <param name="defaultValue">Value to return when the switch is present but value is not provided or is invalid</param>
+        /// <returns>The value</returns>
+        public static int GetSwitchValueAsInt(this string[] args, string sw, int absenceValue = 0, int defaultValue = 0)
+        {
+            var str = args.GetSwitchValue(sw);
+            if (str == null) return absenceValue;
+            if (string.IsNullOrWhiteSpace(str)) return defaultValue;
+            int val;
+            if (!int.TryParse(str, out val))
+            {
+                val = defaultValue;
+            }
+            return val;
+        }
     }
 }
