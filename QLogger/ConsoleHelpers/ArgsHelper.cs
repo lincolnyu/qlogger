@@ -86,13 +86,61 @@ namespace QLogger.ConsoleHelpers
         /// <returns>The value</returns>
         public static int GetSwitchValueAsInt(this string[] args, string sw, int absenceValue = 0, int defaultValue = 0)
         {
+            var res = args.GetSwitchValueAsIntOpt(sw, defaultValue);
+            if (res == null) return absenceValue;
+            return res.Value;
+        }
+
+        /// <summary>
+        ///  Parse switch value as nullable int, returning null if absent
+        /// </summary>
+        /// <param name="args">The arg list</param>
+        /// <param name="sw">The switch</param>
+        /// <param name="defaultValue">Value to return when the switch is present but value is not provided or is invalid</param>
+        /// <returns>The value</returns>
+        public static int? GetSwitchValueAsIntOpt(this string[] args, string sw, int? defaultValue = 0)
+        {
             var str = args.GetSwitchValue(sw);
-            if (str == null) return absenceValue;
+            if (str == null) return null;
             if (string.IsNullOrWhiteSpace(str)) return defaultValue;
             int val;
             if (!int.TryParse(str, out val))
             {
-                val = defaultValue;
+                return defaultValue;
+            }
+            return val;
+        }
+
+        /// <summary>
+        ///  Parse switch value as double
+        /// </summary>
+        /// <param name="args">The arg list</param>
+        /// <param name="sw">The switch</param>
+        /// <param name="absenceValue">Value to return when the switch is absent</param>
+        /// <param name="defaultValue">Value to return when the switch is present but value is not provided or is invalid</param>
+        /// <returns>The value</returns>
+        public static double GetSwitchValueAsDouble(this string[] args, string sw, double absenceValue = 0, int defaultValue = 0)
+        {
+            var res = args.GetSwitchValueAsDoubleOpt(sw, defaultValue);
+            if (res == null) return absenceValue;
+            return res.Value;
+        }
+        /// <summary>
+        ///  Parse switch value as nullable double, returning null if absent
+        /// </summary>
+        /// <param name="args">The arg list</param>
+        /// <param name="sw">The switch</param>
+        /// <param name="defaultValue">Value to return when the switch is present but value is not provided or is invalid</param>
+        /// <returns>The value</returns>
+        public static double? GetSwitchValueAsDoubleOpt(this string[] args, string sw, double? defaultValue = 0)
+        {
+            var str = args.GetSwitchValue(sw);
+            if (str == null) return null;
+            if (string.IsNullOrWhiteSpace(str)) return defaultValue;
+            double val;
+            if (!double.TryParse(str, out val))
+            {
+                return defaultValue;
             }
             return val;
         }
