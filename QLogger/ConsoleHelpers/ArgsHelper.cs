@@ -29,6 +29,19 @@ namespace QLogger.ConsoleHelpers
             return null;
         }
 
+        public static string GetSwitchValueNoSpace(this string[] args, string sw)
+        {
+            for (var i = 0; i < args.Length; i++)
+            {
+                var x = args[i];
+                if (x.StartsWith(sw))
+                {
+                    return x.Substring(sw.Length);
+                }
+            }
+            return null;
+        }
+
         public static IEnumerable<string> ParseArgs(this string argsLine)
         {
             argsLine = argsLine.Trim();
