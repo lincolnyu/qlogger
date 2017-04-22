@@ -4,14 +4,14 @@ namespace QLogger.ConsoleHelpers
 {
     public static class ArgsHelper
     {
-        public static string GetSwitchValue(this string[] args, string sw)
+        public static string GetSwitchValue(this IList<string> args, string sw)
         {
-            for (var i = 0; i < args.Length; i++)
+            for (var i = 0; i < args.Count; i++)
             {
                 var x = args[i];
                 if (x == sw)
                 {
-                    if (i + 1 < args.Length)
+                    if (i + 1 < args.Count)
                     {
                         var t = args[i + 1];
                         if (t.StartsWith("-"))
@@ -29,9 +29,9 @@ namespace QLogger.ConsoleHelpers
             return null;
         }
 
-        public static string GetSwitchValueNoSpace(this string[] args, string sw)
+        public static string GetSwitchValueNoSpace(this IList<string> args, string sw)
         {
-            for (var i = 0; i < args.Length; i++)
+            for (var i = 0; i < args.Count; i++)
             {
                 var x = args[i];
                 if (x.StartsWith(sw))
@@ -97,9 +97,25 @@ namespace QLogger.ConsoleHelpers
         /// <param name="absenceValue">Value to return when the switch is absent</param>
         /// <param name="defaultValue">Value to return when the switch is present but value is not provided or is invalid</param>
         /// <returns>The value</returns>
-        public static int GetSwitchValueAsInt(this string[] args, string sw, int absenceValue = 0, int defaultValue = 0)
+        public static int GetSwitchValueAsInt(this IList<string> args, string sw, int absenceValue = 0, int defaultValue = 0)
         {
             var res = args.GetSwitchValueAsIntOpt(sw, defaultValue);
+            if (res == null) return absenceValue;
+            return res.Value;
+        }
+
+        /// <summary>
+        ///  Parse switch value as long
+        /// </summary>
+        /// <param name="args">The arg list</param>
+        /// <param name="sw">The switch</param>
+        /// <param name="absenceValue">Value to return when the switch is absent</param>
+        /// <param name="defaultValue">Value to return when the switch is present but value is not provided or is invalid</param>
+        /// <returns>The value</returns>
+        /// <returns>The value</returns>
+        public static long GetSwitchValueAsLong(this IList<string> args, string sw, int absenceValue = 0, int defaultValue = 0)
+        {
+            var res = args.GetSwitchValueAsLongOpt(sw, defaultValue);
             if (res == null) return absenceValue;
             return res.Value;
         }
@@ -111,13 +127,31 @@ namespace QLogger.ConsoleHelpers
         /// <param name="sw">The switch</param>
         /// <param name="defaultValue">Value to return when the switch is present but value is not provided or is invalid</param>
         /// <returns>The value</returns>
-        public static int? GetSwitchValueAsIntOpt(this string[] args, string sw, int? defaultValue = 0)
+        public static int? GetSwitchValueAsIntOpt(this IList<string> args, string sw, int? defaultValue = 0)
         {
             var str = args.GetSwitchValue(sw);
             if (str == null) return null;
             if (string.IsNullOrWhiteSpace(str)) return defaultValue;
-            int val;
-            if (!int.TryParse(str, out val))
+            if (!int.TryParse(str, out int val))
+            {
+                return defaultValue;
+            }
+            return val;
+        }
+
+        /// <summary>
+        ///  Parse switch value as nullable long, returning null if absent
+        /// </summary>
+        /// <param name="args">The arg list</param>
+        /// <param name="sw">The switch</param>
+        /// <param name="defaultValue">Value to return when the switch is present but value is not provided or is invalid</param>
+        /// <returns>The value</returns>
+        public static long? GetSwitchValueAsLongOpt(this IList<string> args, string sw, long? defaultValue = 0)
+        {
+            var str = args.GetSwitchValue(sw);
+            if (str == null) return null;
+            if (string.IsNullOrWhiteSpace(str)) return defaultValue;
+            if (!long.TryParse(str, out long val))
             {
                 return defaultValue;
             }
@@ -132,7 +166,7 @@ namespace QLogger.ConsoleHelpers
         /// <param name="absenceValue">Value to return when the switch is absent</param>
         /// <param name="defaultValue">Value to return when the switch is present but value is not provided or is invalid</param>
         /// <returns>The value</returns>
-        public static double GetSwitchValueAsDouble(this string[] args, string sw, double absenceValue = 0, int defaultValue = 0)
+        public static double GetSwitchValueAsDouble(this IList<string> args, string sw, double absenceValue = 0, int defaultValue = 0)
         {
             var res = args.GetSwitchValueAsDoubleOpt(sw, defaultValue);
             if (res == null) return absenceValue;
@@ -145,13 +179,12 @@ namespace QLogger.ConsoleHelpers
         /// <param name="sw">The switch</param>
         /// <param name="defaultValue">Value to return when the switch is present but value is not provided or is invalid</param>
         /// <returns>The value</returns>
-        public static double? GetSwitchValueAsDoubleOpt(this string[] args, string sw, double? defaultValue = 0)
+        public static double? GetSwitchValueAsDoubleOpt(this IList<string> args, string sw, double? defaultValue = 0)
         {
             var str = args.GetSwitchValue(sw);
             if (str == null) return null;
             if (string.IsNullOrWhiteSpace(str)) return defaultValue;
-            double val;
-            if (!double.TryParse(str, out val))
+            if (!double.TryParse(str, out double val))
             {
                 return defaultValue;
             }
