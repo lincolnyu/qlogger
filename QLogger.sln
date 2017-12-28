@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QLogger", "QLogger.csproj", "{124E7226-5154-4A8C-B4A1-BDAEBA8C1973}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QLogger", "QLogger\QLogger.csproj", "{124E7226-5154-4A8C-B4A1-BDAEBA8C1973}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QLoggerTestConsole", "..\QLoggerTestConsole\QLoggerTestConsole.csproj", "{B6D40EC1-5258-4112-B738-316D5672FB5E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QLoggerStd", "QLogger\QLoggerStd.csproj", "{66EB4DAE-AA8F-4D06-88FE-86727C013CB8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QLoggerTestConsole", "QLoggerTestConsole\QLoggerTestConsole.csproj", "{B6D40EC1-5258-4112-B738-316D5672FB5E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QLoggerTests", "QLoggerTests\QLoggerTests.csproj", "{94DF8A3E-319B-446D-A1D2-3A0B99E4F031}"
 EndProject
@@ -19,6 +21,10 @@ Global
 		{124E7226-5154-4A8C-B4A1-BDAEBA8C1973}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{124E7226-5154-4A8C-B4A1-BDAEBA8C1973}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{124E7226-5154-4A8C-B4A1-BDAEBA8C1973}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66EB4DAE-AA8F-4D06-88FE-86727C013CB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66EB4DAE-AA8F-4D06-88FE-86727C013CB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66EB4DAE-AA8F-4D06-88FE-86727C013CB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66EB4DAE-AA8F-4D06-88FE-86727C013CB8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B6D40EC1-5258-4112-B738-316D5672FB5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B6D40EC1-5258-4112-B738-316D5672FB5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B6D40EC1-5258-4112-B738-316D5672FB5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -30,5 +36,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {133BA52E-1C1E-4F61-A11D-73CE53D9F588}
 	EndGlobalSection
 EndGlobal
