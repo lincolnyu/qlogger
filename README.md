@@ -1,0 +1,1 @@
+Need to unload QLoggerStd and delete the obj and bin folder to re-build QLogger
