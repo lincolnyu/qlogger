@@ -154,6 +154,13 @@ namespace QLogger.FileSystemHelpers
             }
         }
 
+        public static string GetParentDirectory(this string path)
+        {
+            var sb = new StringBuilder(path);
+            DirUp(sb);
+            return sb.ToString();
+        }
+
         /// <summary>
         ///  Returns the string that represents to the directory that's <paramref name="relativeDir"/> relative to <paramref name="currentDir"/>
         /// </summary>
